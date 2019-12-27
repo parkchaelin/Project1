@@ -16,48 +16,30 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Context mContext;
-    private TabLayout mTabLayout;
     private ViewPager mViewPager;
-    private ContentsPagerAdapter mContentsPagerAdapter;
-    private ArrayList<String> array_tel;
-    private ListView mListView;
+    SectionPageAdapter adapter = new SectionPageAdapter(getSupportFragmentManager());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mContext = getApplicationContext();
-        mTabLayout = (TabLayout) findViewById(R.id.layout_tab);
-
-        mTabLayout.addTab(mTabLayout.newTab().setText("연락처"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("이미지"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("00"));
-
         mViewPager = (ViewPager) findViewById(R.id.pager_content);
-        mContentsPagerAdapter = new ContentsPagerAdapter(getSupportFragmentManager(),mTabLayout.getTabCount());
-        mViewPager.setAdapter(mContentsPagerAdapter);
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        setupViewPager(mViewPager);
 
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
-            }
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
-        });
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.layout_tab);
+        tabLayout.setupWithViewPager(mViewPager);
 
 
     }
 
-
-
-
+    public void setupViewPager(ViewPager viewPager) {
+        adapter.addFragment(new TelFragment(), "연락처");
+        adapter.addFragment(new ImageFragment(), "이미지");
+        adapter.addFragment(new BlankFragment(), "01");
+        viewPager.setAdapter(adapter);
+    }
 }
 
 //
