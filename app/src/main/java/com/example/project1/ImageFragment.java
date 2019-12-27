@@ -68,8 +68,8 @@ public class ImageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_image, container, false);
-//        GridView gridView = (GridView) view.findViewById(R.id.gridView);
-//        gridView.setAdapter(new ImageAdapter(this));
+        GridView gridView = (GridView) view.findViewById(R.id.gridView);
+        gridView.setAdapter(new ImageAdapter(getActivity()));
 
         return view;
 }
