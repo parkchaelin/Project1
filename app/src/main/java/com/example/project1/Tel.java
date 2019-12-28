@@ -1,25 +1,31 @@
 package com.example.project1;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Tel {
+    @SerializedName("name")
     private String name;
-    private String tel;
+    @SerializedName("phone")
+    private String phone;
 
 
     public String getName() {
         return name;
     }
 
-    public String getTel() {
-        return tel;
+    public String getPhone() {
+        return phone;
     }
+
+
 
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setTel(String tel) {
-        this.tel = tel;
+    public void setPhone(String tel) {
+        this.phone = phone;
     }
 
 }
