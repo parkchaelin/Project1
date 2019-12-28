@@ -3,25 +3,30 @@ package com.example.project1.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.project1.Adapters.SectionPageAdapter;
-import com.example.project1.Fragments.BlankFragment;
+import com.example.project1.Classes.myTime;
+import com.example.project1.Fragments.WorkTimeFragment;
 import com.example.project1.Fragments.ImageFragment;
 import com.example.project1.Fragments.TelFragment;
 import com.example.project1.R;
 import com.google.android.material.tabs.TabLayout;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
+public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     SectionPageAdapter adapter = new SectionPageAdapter(getSupportFragmentManager());
+    Button Btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mViewPager = (ViewPager) findViewById(R.id.pager_content);
         setupViewPager(mViewPager);
 
@@ -29,12 +34,14 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.layout_tab);
         tabLayout.setupWithViewPager(mViewPager);
 
+
+
     }
 
     public void setupViewPager(ViewPager viewPager) {
         adapter.addFragment(new TelFragment(), "연락처");
         adapter.addFragment(new ImageFragment(), "이미지");
-        adapter.addFragment(new BlankFragment(), "01");
+        adapter.addFragment(new WorkTimeFragment(), "WorkTime");
         viewPager.setAdapter(adapter);
     }
 }
