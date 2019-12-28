@@ -1,4 +1,4 @@
-package com.example.project1;
+package com.example.project1.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,18 +6,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.project1.Adapters.TelAdapter;
+import com.example.project1.Classes.JsonModel;
+import com.example.project1.R;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TelFragment extends Fragment {
     ViewPager viewPager;

@@ -1,12 +1,13 @@
-package com.example.project1;
+package com.example.project1.Adapters;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import com.example.project1.R;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;

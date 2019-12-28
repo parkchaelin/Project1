@@ -1,4 +1,4 @@
-package com.example.project1;
+package com.example.project1.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,10 @@ import android.widget.GridView;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+
+import com.example.project1.Adapters.ImageAdapter;
+import com.example.project1.Activities.FullImageActivity;
+import com.example.project1.R;
 
 public class ImageFragment extends Fragment {
     ViewPager viewPager;

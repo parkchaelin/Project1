@@ -1,18 +1,16 @@
-package com.example.project1;
+package com.example.project1.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ListView;
-import android.widget.TextView;
 
+import com.example.project1.Adapters.SectionPageAdapter;
+import com.example.project1.Fragments.BlankFragment;
+import com.example.project1.Fragments.ImageFragment;
+import com.example.project1.Fragments.TelFragment;
+import com.example.project1.R;
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 

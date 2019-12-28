@@ -1,9 +1,12 @@
-package com.example.project1;
+package com.example.project1.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
+
+import com.example.project1.Adapters.ImageAdapter;
+import com.example.project1.R;
 
 public class FullImageActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {

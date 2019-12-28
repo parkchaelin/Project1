@@ -1,4 +1,4 @@
-package com.example.project1;
+package com.example.project1.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+
+import com.example.project1.R;
 
 public class BlankFragment extends Fragment {
     ViewPager viewPager;
