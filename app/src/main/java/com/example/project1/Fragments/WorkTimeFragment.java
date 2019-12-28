@@ -2,6 +2,7 @@ package com.example.project1.Fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,55 +22,89 @@ import java.util.Date;
 
 public class WorkTimeFragment extends Fragment {
     ViewPager viewPager;
-    public static boolean check = false;
-    static int myColor = Color.WHITE;
+
     ArrayList<myTime> myTimeList;
-    String str1; String str2;
-    int myint = 0;
+
+    Date startTime;
+    Date endTime;
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    String startTimeText;
+    String endTimeText;
+
+
+
     public WorkTimeFragment(){
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         final View view = inflater.inflate(R.layout.fragment_work_time, container, false);
-        final Button Btn = (Button) view.findViewById(R.id.Button1);
-        Btn.setBackgroundColor(myColor);
+        final Button startButton = (Button) view.findViewById(R.id.startButton);
+        final Button endButton = (Button) view.findViewById(R.id.endButton);
 
         InitializeData();
         final ListView worktimeview = (ListView) view.findViewById(R.id.workTimeView);
         final WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
         worktimeview.setAdapter(workTimeAdapter);
 
-        Btn.setOnClickListener(new View.OnClickListener() {
+        startButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                startButton.setVisibility(view.INVISIBLE);
+                endButton.setVisibility(view.VISIBLE);
+                long now = System.currentTimeMillis();
+                startTime = new Date(now);
+                startTimeText = format.format(startTime);
+                Log.d("start time", "start time : " + startTimeText);
+            }
+        });
 
-            @Override
-            public void onClick(View v) {
-                if(check == false)
-                {
-                    Btn.setBackgroundColor(Color.RED);
-                    check = true;
-                    long now = System.currentTimeMillis();
-                    Date mDate = new Date(now);
-                    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    String getTime = simpleDate.format(mDate);
-                    str1 = getTime;
-                }
-                else {
-                Btn.setBackgroundColor(Color.WHITE);
-                check = false;
-                    long now = System.currentTimeMillis();
-                    Date mDate = new Date(now);
-                    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    String getTime = simpleDate.format(mDate);
-                str2 = getTime;
-                myTimeList.add(new myTime(str1, str2));
+        endButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                startButton.setVisibility(view.VISIBLE);
+                endButton.setVisibility(view.INVISIBLE);
+                long now = System.currentTimeMillis();
+                endTime = new Date(now);
+                endTimeText = format.format(endTime);
+                Log.d("end time", "start time : " + endTimeText);
+                myTimeList.add(new myTime(startTimeText, endTimeText));
                 WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
                 worktimeview.setAdapter(workTimeAdapter);
-                }
-
-
 
             }
         });
+
+
+
+//        Btn.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                if(check == false)
+//                {
+//                    Btn.setBackgroundColor(Color.RED);
+//                    check = true;
+//                    long now = System.currentTimeMillis();
+//                    Date mDate = new Date(now);
+//                    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+//                    String getTime = simpleDate.format(mDate);
+//                    str1 = getTime;
+//                }
+//                else {
+//                Btn.setBackgroundColor(Color.WHITE);
+//                check = false;
+//                    long now = System.currentTimeMillis();
+//                    Date mDate = new Date(now);
+//                    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+//                    String getTime = simpleDate.format(mDate);
+//                str2 = getTime;
+//                myTimeList.add(new myTime(str1, str2));
+//                WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
+//                worktimeview.setAdapter(workTimeAdapter);
+//                }
+//
+//
+//
+//            }
+//        });
         return view;
 
     }
