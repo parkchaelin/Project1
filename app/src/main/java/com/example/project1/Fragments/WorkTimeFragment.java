@@ -1,17 +1,20 @@
 package com.example.project1.Fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.project1.Activities.WorkTimeActivity;
 import com.example.project1.Adapters.WorkTimeAdapter;
 import com.example.project1.Classes.myTime;
 import com.example.project1.R;
@@ -30,7 +33,6 @@ public class WorkTimeFragment extends Fragment {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     String startTimeText;
     String endTimeText;
-
 
 
     public WorkTimeFragment(){
@@ -69,6 +71,21 @@ public class WorkTimeFragment extends Fragment {
                 WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
                 worktimeview.setAdapter(workTimeAdapter);
 
+            }
+        });
+
+        worktimeview.setAdapter(workTimeAdapter);
+
+        worktimeview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), WorkTimeActivity.class);
+                startTimeText = myTimeList.get(position).getstartTime();
+                endTimeText = myTimeList.get(position).getEndTime();
+                intent.putExtra("startTimeText", startTimeText);
+                intent.putExtra("endTimeText", endTimeText);
+
+                Log.d("end time", "****************8end time : " + endTimeText);
+                startActivity(intent);
             }
         });
 

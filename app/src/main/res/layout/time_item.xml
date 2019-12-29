@@ -7,11 +7,12 @@
         android:id="@+id/stt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="25dp"/>
+        android:textSize="25dp" />
 
     <TextView
         android:id="@+id/edt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="25dp"/>
+        android:textSize="25dp" />
+
 </LinearLayout>
