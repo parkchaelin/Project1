@@ -42,9 +42,10 @@ public class TelAdapter extends BaseAdapter {
         return 0;
         //return i;
     }
-
+    //i번째 리스트의 view를 관리하는 메소드
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        //tel_item을 그려줌.
         view = inflter.inflate(R.layout.tel_item, null);
 
         TextView txtName = (TextView) view.findViewById(R.id.name);

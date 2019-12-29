@@ -41,8 +41,8 @@ public class WorkTimeActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.editText);
 
         intent = getIntent();
-        startTimeText = intent.getExtras().getString("startTimeText");
-        endTimeText = intent.getExtras().getString("endTimeText");
+        startTimeText = intent.getExtras().getString("tempstartTimeText");
+        endTimeText = intent.getExtras().getString("tempendTimeText");
         stt.setText(startTimeText);
         edt.setText(endTimeText);
 

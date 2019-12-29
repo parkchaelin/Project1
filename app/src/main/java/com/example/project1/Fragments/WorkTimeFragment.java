@@ -34,20 +34,28 @@ public class WorkTimeFragment extends Fragment {
     String startTimeText;
     String endTimeText;
 
-
     public WorkTimeFragment(){
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        //버튼과 리스트 화면에 띄움
         final View view = inflater.inflate(R.layout.fragment_work_time, container, false);
+
+        //start, end 버튼에 대한 참조 획득
         final Button startButton = (Button) view.findViewById(R.id.startButton);
         final Button endButton = (Button) view.findViewById(R.id.endButton);
 
-        InitializeData();
-        final ListView worktimeview = (ListView) view.findViewById(R.id.workTimeView);
-        final WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
-        worktimeview.setAdapter(workTimeAdapter);
+        //{start time, end time} class의 List
+        myTimeList = new ArrayList<myTime>();
 
+        //오른쪽의 ListView에 대한 참조 획득
+        final ListView worktimeview = (ListView) view.findViewById(R.id.workTimeView);
+
+        //ListView의 각 List를 관리하는 adapter 연결(없어도문제없음)
+//        final WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
+//        worktimeview.setAdapter(workTimeAdapter);
+
+        //StartButton 눌렀을 때의 기능 구현
         startButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 startButton.setVisibility(view.INVISIBLE);
@@ -59,6 +67,7 @@ public class WorkTimeFragment extends Fragment {
             }
         });
 
+        //endButton 눌렀을 때의 기능 구현
         endButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 startButton.setVisibility(view.VISIBLE);
@@ -67,24 +76,25 @@ public class WorkTimeFragment extends Fragment {
                 endTime = new Date(now);
                 endTimeText = format.format(endTime);
                 Log.d("end time", "start time : " + endTimeText);
-                myTimeList.add(new myTime(startTimeText, endTimeText));
+                myTimeList.add(0, new myTime(startTimeText, endTimeText));
                 WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
                 worktimeview.setAdapter(workTimeAdapter);
 
             }
         });
+        //????
+        //worktimeview.setAdapter(workTimeAdapter);
 
-        worktimeview.setAdapter(workTimeAdapter);
-
+        //리스트 클릭했을 때의 기능 구현
         worktimeview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), WorkTimeActivity.class);
-                startTimeText = myTimeList.get(position).getstartTime();
-                endTimeText = myTimeList.get(position).getEndTime();
-                intent.putExtra("startTimeText", startTimeText);
-                intent.putExtra("endTimeText", endTimeText);
+                String tempstartTimeText = myTimeList.get(position).getstartTime();
+                String tempendTimeText = myTimeList.get(position).getEndTime();
+                intent.putExtra("tempstartTimeText", tempstartTimeText);
+                intent.putExtra("tempendTimeText", tempendTimeText);
 
-                Log.d("end time", "****************8end time : " + endTimeText);
+                Log.d("end time", "****************8end time : " + tempendTimeText);
                 startActivity(intent);
             }
         });
@@ -124,9 +134,5 @@ public class WorkTimeFragment extends Fragment {
 //        });
         return view;
 
-    }
-    public void InitializeData()
-    {
-        myTimeList = new ArrayList<myTime>();
     }
 }
