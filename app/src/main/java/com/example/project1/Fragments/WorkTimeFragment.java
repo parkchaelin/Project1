@@ -1,6 +1,9 @@
 package com.example.project1.Fragments;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,8 +36,13 @@ public class WorkTimeFragment extends Fragment {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     String startTimeText;
     String endTimeText;
-
+    SQLiteDatabase sqliteDB;
+    Cursor cursor = null;
+    String st; String ed;
     public WorkTimeFragment(){
+    }
+    public WorkTimeFragment(SQLiteDatabase sq){
+        sqliteDB = sq;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -44,6 +52,9 @@ public class WorkTimeFragment extends Fragment {
         //start, end 버튼에 대한 참조 획득
         final Button startButton = (Button) view.findViewById(R.id.startButton);
         final Button endButton = (Button) view.findViewById(R.id.endButton);
+        final Button deleteButton = (Button) view.findViewById(R.id.deleteButton);
+        String sqlCreateTbl = "CREATE TABLE IF NOT EXISTS TIME_T (TIME CHAR(25), BOOL INTEGER)";
+        sqliteDB.execSQL(sqlCreateTbl) ;
 
         //{start time, end time} class의 List
         myTimeList = new ArrayList<myTime>();
@@ -55,15 +66,69 @@ public class WorkTimeFragment extends Fragment {
 //        final WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
 //        worktimeview.setAdapter(workTimeAdapter);
 
+
+
+        Cursor cursor = sqliteDB.rawQuery("SELECT * FROM TIME_T", null) ;
+
+        while (cursor.moveToNext()) {
+            if (cursor.getInt(1) == 0) {
+                st = cursor.getString(0);
+            }
+            if (cursor.getInt(1) ==1) {
+                ed = cursor.getString(0);
+                myTimeList.add(0, new myTime(st, ed));
+            }
+        }
+        cursor.close();
+        Cursor cs = sqliteDB.rawQuery("SELECT * FROM TIME_T", null) ;
+        int myinteger = 0;
+        while (cs.moveToNext()) {
+            // 첫 번째 컬럼(Column)이 INTEGER 타입인 경우.
+            if (cs.getInt(1) == 0) {
+                myinteger = 0;
+            }
+            if (cs.getInt(1) ==1) {
+                myinteger = 1;
+            };
+        }
+        cs.close();
+        if (myinteger == 0) {
+            startButton.setVisibility(view.GONE);
+            endButton.setVisibility(view.VISIBLE);
+        }
+        else {
+            startButton.setVisibility(view.VISIBLE);
+            endButton.setVisibility(view.GONE);
+        }
+
+        WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
+        worktimeview.setAdapter(workTimeAdapter);
+
         //StartButton 눌렀을 때의 기능 구현
         startButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                startButton.setVisibility(view.INVISIBLE);
+                startButton.setVisibility(view.GONE);
                 endButton.setVisibility(view.VISIBLE);
                 long now = System.currentTimeMillis();
                 startTime = new Date(now);
                 startTimeText = format.format(startTime);
                 Log.d("start time", "start time : " + startTimeText);
+                String sqlInsert = "INSERT INTO TIME_T (TIME, BOOL) VALUES ('"+startTimeText+"', 0)" ;//STARTTIME
+                sqliteDB.execSQL(sqlInsert) ;
+            }
+        });
+
+        //deleteButton 구현
+        deleteButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+
+                String sqlDropTbl = "DROP TABLE TIME_T" ;
+                sqliteDB.execSQL(sqlDropTbl) ;
+                String sqlCreateTbl = "CREATE TABLE IF NOT EXISTS TIME_T (TIME CHAR(25), BOOL INTEGER)";
+                sqliteDB.execSQL(sqlCreateTbl) ;
+                myTimeList = new ArrayList<myTime>();
+                WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
+                worktimeview.setAdapter(workTimeAdapter);
             }
         });
 
@@ -71,19 +136,37 @@ public class WorkTimeFragment extends Fragment {
         endButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 startButton.setVisibility(view.VISIBLE);
-                endButton.setVisibility(view.INVISIBLE);
+                endButton.setVisibility(view.GONE);
                 long now = System.currentTimeMillis();
                 endTime = new Date(now);
                 endTimeText = format.format(endTime);
                 Log.d("end time", "start time : " + endTimeText);
+
+                String sqlInsert = "INSERT INTO TIME_T (TIME, BOOL) VALUES ('"+endTimeText+"', 1)" ;//ENDTIME
+                sqliteDB.execSQL(sqlInsert) ;
+
+                Cursor cs = sqliteDB.rawQuery("SELECT * FROM TIME_T", null) ;
+                while (cs.moveToNext()) {
+                    // 첫 번째 컬럼(Column)이 INTEGER 타입인 경우.
+                    if (cs.getInt(1) == 0) {
+                        startTimeText = cs.getString(0);
+                    }
+                }
+                cs.close();
+
+
                 myTimeList.add(0, new myTime(startTimeText, endTimeText));
                 WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
                 worktimeview.setAdapter(workTimeAdapter);
-
             }
         });
-        //????
-        //worktimeview.setAdapter(workTimeAdapter);
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        //            List 삭제, 초기화 구현하기                                              //
+        //            Boolean 추가해서 버튼 start되었는지 확인. true일때 false일때 구현       //
+        ////////////////////////////////////////////////////////////////////////////////////////
+
 
         //리스트 클릭했을 때의 기능 구현
         worktimeview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -94,45 +177,18 @@ public class WorkTimeFragment extends Fragment {
                 intent.putExtra("tempstartTimeText", tempstartTimeText);
                 intent.putExtra("tempendTimeText", tempendTimeText);
 
-                Log.d("end time", "****************8end time : " + tempendTimeText);
+                Log.d("end time", "***************8end time : " + tempendTimeText);
                 startActivity(intent);
             }
         });
 
 
 
-//        Btn.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                if(check == false)
-//                {
-//                    Btn.setBackgroundColor(Color.RED);
-//                    check = true;
-//                    long now = System.currentTimeMillis();
-//                    Date mDate = new Date(now);
-//                    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-//                    String getTime = simpleDate.format(mDate);
-//                    str1 = getTime;
-//                }
-//                else {
-//                Btn.setBackgroundColor(Color.WHITE);
-//                check = false;
-//                    long now = System.currentTimeMillis();
-//                    Date mDate = new Date(now);
-//                    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-//                    String getTime = simpleDate.format(mDate);
-//                str2 = getTime;
-//                myTimeList.add(new myTime(str1, str2));
-//                WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
-//                worktimeview.setAdapter(workTimeAdapter);
-//                }
-//
-//
-//
-//            }
-//        });
+
         return view;
 
     }
+
+
+
 }

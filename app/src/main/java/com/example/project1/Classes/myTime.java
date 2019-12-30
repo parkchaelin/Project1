@@ -6,7 +6,11 @@ import android.view.View;
 public class myTime {
     public String startTime;
     public String endTime;
-    public View.OnClickListener onClickListener;
+    public myTime() {
+        this.startTime = "00:00:00";
+        this.endTime = "00:00:00";
+
+    }
     public myTime(String startTime, String endTime) {
         this.startTime = startTime;
         this.endTime = endTime;

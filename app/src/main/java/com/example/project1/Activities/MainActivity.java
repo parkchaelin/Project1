@@ -1,8 +1,12 @@
 package com.example.project1.Activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -20,15 +24,22 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
-
+    String dbName = "sample.db";
+    int dbMode = Context.MODE_PRIVATE;
+    SQLiteDatabase sqliteDB;
     //SectionPageAdapter에 대한 객체를 생성하여 참조 획득
     SectionPageAdapter adapter = new SectionPageAdapter(getSupportFragmentManager());
-    Button Btn;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        sqliteDB = openOrCreateDatabase(dbName,dbMode,null);
+
 
         //activity_main.xml에서 ViewPager에 대한 참조 획득
         mViewPager = (ViewPager) findViewById(R.id.pager_content);
@@ -49,22 +60,8 @@ public class MainActivity extends AppCompatActivity {
     public void setupViewPager(ViewPager viewPager) {
         adapter.addFragment(new TelFragment(), "연락처");
         adapter.addFragment(new ImageFragment(), "이미지");
-        adapter.addFragment(new WorkTimeFragment(), "WorkTime");
+        adapter.addFragment(new WorkTimeFragment(sqliteDB), "WorkTime");
         viewPager.setAdapter(adapter);
     }
-}
 
-//
-//
-//    private View createTabView(String tabName) {
-//
-//        View tabView = LayoutInflater.from(mContext).inflate(R.layout.custom_tab, null);
-//
-//        TextView txt_name = (TextView) tabView.findViewById(R.id.txt_name);
-//
-//        txt_name.setText(tabName);
-//
-//        return tabView;
-//
-//    }
-//}
+}
