@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.example.project1.Adapters.ImageAdapter;
 import com.example.project1.R;
+import com.github.chrisbanes.photoview.PhotoView;
 
 public class FullImageActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
@@ -20,8 +21,8 @@ public class FullImageActivity extends Activity {
         int position = i.getExtras().getInt("id");
         ImageAdapter imageAdapter = new ImageAdapter(this);
 
-        ImageView imageView = (ImageView) findViewById(R.id.full_image_view);
-        imageView.setImageResource(imageAdapter.mThumbIds[position]);
+        PhotoView photoView = (PhotoView) findViewById(R.id.full_image_view);
+        photoView.setImageResource(imageAdapter.mThumbIds[position]);
 
     }
 }

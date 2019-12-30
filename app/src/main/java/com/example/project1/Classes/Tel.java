@@ -8,6 +8,11 @@ public class Tel {
     @SerializedName("phone")
     private String phone;
 
+    public Tel(String name, String phone){
+        this.name = name;
+        this.phone = phone;
+    }
+
 
     public String getName() {
         return name;
