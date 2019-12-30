@@ -27,17 +27,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class WorkTimeFragment extends Fragment {
-    ViewPager viewPager;
-
     ArrayList<myTime> myTimeList;
-
     Date startTime;
     Date endTime;
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     String startTimeText;
     String endTimeText;
     SQLiteDatabase sqliteDB;
-    Cursor cursor = null;
     String st; String ed;
     public WorkTimeFragment(){
     }
@@ -45,7 +41,7 @@ public class WorkTimeFragment extends Fragment {
         sqliteDB = sq;
     }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //버튼과 리스트 화면에 띄움
         final View view = inflater.inflate(R.layout.fragment_work_time, container, false);
 
@@ -53,8 +49,10 @@ public class WorkTimeFragment extends Fragment {
         final Button startButton = (Button) view.findViewById(R.id.startButton);
         final Button endButton = (Button) view.findViewById(R.id.endButton);
         final Button deleteButton = (Button) view.findViewById(R.id.deleteButton);
+
+        //테이블 만들기
         String sqlCreateTbl = "CREATE TABLE IF NOT EXISTS TIME_T (TIME CHAR(25), BOOL INTEGER)";
-        sqliteDB.execSQL(sqlCreateTbl) ;
+        sqliteDB.execSQL(sqlCreateTbl);
 
         //{start time, end time} class의 List
         myTimeList = new ArrayList<myTime>();
@@ -62,90 +60,81 @@ public class WorkTimeFragment extends Fragment {
         //오른쪽의 ListView에 대한 참조 획득
         final ListView worktimeview = (ListView) view.findViewById(R.id.workTimeView);
 
-        //ListView의 각 List를 관리하는 adapter 연결(없어도문제없음)
-//        final WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
-//        worktimeview.setAdapter(workTimeAdapter);
-
-
-
-        Cursor cursor = sqliteDB.rawQuery("SELECT * FROM TIME_T", null) ;
-
-        while (cursor.moveToNext()) {
-            if (cursor.getInt(1) == 0) {
-                st = cursor.getString(0);
-            }
-            if (cursor.getInt(1) ==1) {
-                ed = cursor.getString(0);
-                myTimeList.add(0, new myTime(st, ed));
-            }
-        }
+        //DB의 TABLE 전부 리스트에 추가
+        Cursor cursor = sqliteDB.rawQuery("SELECT * FROM TIME_T", null);
+        String retString;
+        retString = initialize(cursor);
         cursor.close();
-        Cursor cs = sqliteDB.rawQuery("SELECT * FROM TIME_T", null) ;
-        int myinteger = 0;
-        while (cs.moveToNext()) {
-            // 첫 번째 컬럼(Column)이 INTEGER 타입인 경우.
-            if (cs.getInt(1) == 0) {
-                myinteger = 0;
-            }
-            if (cs.getInt(1) ==1) {
-                myinteger = 1;
-            };
-        }
-        cs.close();
-        if (myinteger == 0) {
-            startButton.setVisibility(view.GONE);
-            endButton.setVisibility(view.VISIBLE);
-        }
-        else {
-            startButton.setVisibility(view.VISIBLE);
-            endButton.setVisibility(view.GONE);
-        }
 
+        // Button 시작인지 끝인지 정하기 위해 last element의 int를 구하기
+        Cursor cs = sqliteDB.rawQuery("SELECT * FROM TIME_T", null);
+        int lastInt = getLastElementInt(cs);
+        cs.close();
+
+        // 버튼 시작,끝 정하기
+        ButtonInitialize(startButton, endButton, lastInt, view);
+
+        //리스트에 불러온 DB들 띄우기
         WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
         worktimeview.setAdapter(workTimeAdapter);
 
+
         //StartButton 눌렀을 때의 기능 구현
-        startButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        startButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 startButton.setVisibility(view.GONE);
                 endButton.setVisibility(view.VISIBLE);
                 long now = System.currentTimeMillis();
                 startTime = new Date(now);
                 startTimeText = format.format(startTime);
-                Log.d("start time", "start time : " + startTimeText);
-                String sqlInsert = "INSERT INTO TIME_T (TIME, BOOL) VALUES ('"+startTimeText+"', 0)" ;//STARTTIME
-                sqliteDB.execSQL(sqlInsert) ;
+                // StartTime TABLE에 추가
+                String sqlInsert = "INSERT INTO TIME_T (TIME, BOOL) VALUES ('" + startTimeText + "', 0)";
+                sqliteDB.execSQL(sqlInsert);
             }
         });
 
         //deleteButton 구현
-        deleteButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                String myLastString = "myLastString";
+                Cursor cs = sqliteDB.rawQuery("SELECT * FROM TIME_T", null);
+                int myLastInt = getLastElementInt(cs);
+                cs.close();
 
-                String sqlDropTbl = "DROP TABLE TIME_T" ;
-                sqliteDB.execSQL(sqlDropTbl) ;
+                if (myLastInt == 0) {
+                    cs = sqliteDB.rawQuery("SELECT * FROM TIME_T", null);
+                    myLastString = getLastElementString(cs);
+                    cs.close();
+                }
+
+                String sqlDropTbl = "DROP TABLE TIME_T";
+                sqliteDB.execSQL(sqlDropTbl);
                 String sqlCreateTbl = "CREATE TABLE IF NOT EXISTS TIME_T (TIME CHAR(25), BOOL INTEGER)";
-                sqliteDB.execSQL(sqlCreateTbl) ;
+                sqliteDB.execSQL(sqlCreateTbl);
                 myTimeList = new ArrayList<myTime>();
+
+                if (myLastInt == 0) {
+                    String sqlInsert = "INSERT INTO TIME_T (TIME, BOOL) VALUES ('" + myLastString + "', 0)";
+                    sqliteDB.execSQL(sqlInsert);
+                }
                 WorkTimeAdapter workTimeAdapter = new WorkTimeAdapter(getActivity().getApplicationContext(), myTimeList);
                 worktimeview.setAdapter(workTimeAdapter);
             }
         });
 
         //endButton 눌렀을 때의 기능 구현
-        endButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        endButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 startButton.setVisibility(view.VISIBLE);
                 endButton.setVisibility(view.GONE);
                 long now = System.currentTimeMillis();
                 endTime = new Date(now);
                 endTimeText = format.format(endTime);
-                Log.d("end time", "start time : " + endTimeText);
 
-                String sqlInsert = "INSERT INTO TIME_T (TIME, BOOL) VALUES ('"+endTimeText+"', 1)" ;//ENDTIME
-                sqliteDB.execSQL(sqlInsert) ;
+                String sqlInsert = "INSERT INTO TIME_T (TIME, BOOL) VALUES ('" + endTimeText + "', 1)";//ENDTIME
+                sqliteDB.execSQL(sqlInsert);
 
-                Cursor cs = sqliteDB.rawQuery("SELECT * FROM TIME_T", null) ;
+                Cursor cs = sqliteDB.rawQuery("SELECT * FROM TIME_T", null);
                 while (cs.moveToNext()) {
                     // 첫 번째 컬럼(Column)이 INTEGER 타입인 경우.
                     if (cs.getInt(1) == 0) {
@@ -169,26 +158,80 @@ public class WorkTimeFragment extends Fragment {
 
 
         //리스트 클릭했을 때의 기능 구현
-        worktimeview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        worktimeview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), WorkTimeActivity.class);
                 String tempstartTimeText = myTimeList.get(position).getstartTime();
                 String tempendTimeText = myTimeList.get(position).getEndTime();
                 intent.putExtra("tempstartTimeText", tempstartTimeText);
                 intent.putExtra("tempendTimeText", tempendTimeText);
-
-                Log.d("end time", "***************8end time : " + tempendTimeText);
                 startActivity(intent);
             }
         });
-
-
-
-
         return view;
-
     }
 
 
+    public String initialize(Cursor cursor) {
+        int myint = 0;
+        while (cursor.moveToNext()) {
+            if (cursor.getInt(1) == 0) {
+                st = cursor.getString(0);
+                myint = 1;
+            }
+            if (cursor.getInt(1) == 1) {
+                ed = cursor.getString(0);
+                myTimeList.add(0, new myTime(st, ed));
+                myint = 2;
+            }
+
+        }
+        if (myint == 0) {return "Nothing in the Table";}
+        else if (myint == 1){return st;}
+        else {return ed;}
+    }
+    public int getLastElementInt(Cursor cs) {
+        int myint = 0;
+        while (cs.moveToNext()) {
+            // 첫 번째 컬럼(Column)이 INTEGER 타입인 경우.
+            if (cs.getInt(1) == 0) {
+                myint = 1;
+            }
+            if (cs.getInt(1) == 1) {
+                myint = 2;
+            }
+        }
+        if (myint == 0) {return -1;}
+        else if (myint == 1){return 0;}
+        else {return 1;}
+    }
+
+    public String getLastElementString(Cursor cs) {
+        int myint = 0;
+        while (cs.moveToNext()) {
+            // 첫 번째 컬럼(Column)이 INTEGER 타입인 경우.
+            if (cs.getInt(1) == 0) {
+                myint = 1;
+                st = cs.getString(0);
+            }
+            if (cs.getInt(1) == 1) {
+                myint = 2;
+                ed = cs.getString(0);
+            }
+        }
+        if (myint == 0) {return "None";}
+        else if (myint == 1){return st;}
+        else {return ed;}
+    }
+
+    public void ButtonInitialize(Button startButton,Button endButton,int lastInt, View view) {
+        if (lastInt == 0) {
+            startButton.setVisibility(view.GONE);
+            endButton.setVisibility(view.VISIBLE);
+        } else {
+            startButton.setVisibility(view.VISIBLE);
+            endButton.setVisibility(view.GONE);
+        }
+    }
 
 }
