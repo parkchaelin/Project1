@@ -25,12 +25,10 @@ import com.example.project1.Adapters.WorkTimeAdapter;
 import com.example.project1.Classes.myTime;
 import com.example.project1.R;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static android.app.Activity.RESULT_OK;
 
 
 public class WorkTimeFragment extends Fragment {

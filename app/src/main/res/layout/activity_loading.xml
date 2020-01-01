@@ -13,13 +13,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="88dp"
         android:layout_marginLeft="88dp"
-        android:layout_marginTop="56dp"
-        android:text="Schedule Diary"
+        android:layout_marginTop="60dp"
+        android:text="Mad Diary"
         android:textColor="#413F3F"
         android:textSize="35dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.021"
+        app:layout_constraintHorizontal_bias="0.226"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 

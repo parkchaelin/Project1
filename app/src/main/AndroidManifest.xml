@@ -4,13 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
-        android:label="@string/app_name"
+        android:label="Mad Diary"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -18,7 +16,7 @@
         <activity
             android:name=".Activities.LoadingActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-        </activity>
+    </activity>
 
         <activity android:name=".Activities.MainActivity">
             <intent-filter>

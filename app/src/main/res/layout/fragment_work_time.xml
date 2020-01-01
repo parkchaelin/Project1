@@ -20,6 +20,7 @@
         </ListView>
 
         <View
+            android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="#BDBDBD"
@@ -29,7 +30,7 @@
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#00FFFFFF"
+            android:background="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageButton
