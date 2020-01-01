@@ -11,12 +11,11 @@ import android.widget.GridView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.project1.Adapters.ImageAdapter;
 import com.example.project1.Activities.FullImageActivity;
+import com.example.project1.Adapters.ImageAdapter;
 import com.example.project1.R;
 
 public class ImageFragment extends Fragment {
-    ViewPager viewPager;
 
     public ImageFragment(){
 
@@ -32,6 +31,7 @@ public class ImageFragment extends Fragment {
         //각각의 gridview를 관리해줄 adapter 연결
         gridView.setAdapter(new ImageAdapter(getActivity()));
 
+
         //gridview를 클릭했을 떄 나타나는 효과에 대한 메소드
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -45,10 +45,6 @@ public class ImageFragment extends Fragment {
 
             }
         });
-
-
         return view;
-
     }
-
 }

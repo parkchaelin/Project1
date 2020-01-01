@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     String dbName = "sample.db";
     int dbMode = Context.MODE_PRIVATE;
-    SQLiteDatabase sqliteDB;
+    SQLiteDatabase myDB;
     //SectionPageAdapter에 대한 객체를 생성하여 참조 획득
     SectionPageAdapter adapter = new SectionPageAdapter(getSupportFragmentManager());
 
@@ -37,9 +38,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = new Intent(this, LoadingActivity.class);
+        startActivity(intent);
 
-        sqliteDB = openOrCreateDatabase(dbName,dbMode,null);
-
+        myDB = openOrCreateDatabase(dbName,dbMode,null);
 
         //activity_main.xml에서 ViewPager에 대한 참조 획득
         mViewPager = (ViewPager) findViewById(R.id.pager_content);
@@ -53,14 +55,12 @@ public class MainActivity extends AppCompatActivity {
         //위에서 세팅한 ViewPager과 TabLayout을 연동시키는 메소드
         tabLayout.setupWithViewPager(mViewPager);
 
-
-
     }
     //SectionPageAdapter에 Fragment들 추가
     public void setupViewPager(ViewPager viewPager) {
-        adapter.addFragment(new TelFragment(), "연락처");
-        adapter.addFragment(new ImageFragment(), "이미지");
-        adapter.addFragment(new WorkTimeFragment(sqliteDB), "WorkTime");
+        adapter.addFragment(new TelFragment(), "CONTACTS");
+        adapter.addFragment(new ImageFragment(), "IMAGES");
+        adapter.addFragment(new WorkTimeFragment(myDB), "WORKTIME");
         viewPager.setAdapter(adapter);
     }
 
