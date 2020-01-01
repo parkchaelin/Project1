@@ -94,7 +94,19 @@ public class WorkTimeFragment extends Fragment {
         //StartButton 눌렀을 때의 기능 구현
         startButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                try {
 
+                    Thread.sleep(350); //1초 대기
+
+                } catch (InterruptedException e) {
+
+                    e.printStackTrace();
+
+                }
+
+
+
+                출처: https://jink1982.tistory.com/185 [돼민이]
 
 
                 startButton.setVisibility(view.GONE); endButton.setVisibility(view.VISIBLE);
@@ -148,7 +160,19 @@ public class WorkTimeFragment extends Fragment {
         endButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
+                try {
 
+                    Thread.sleep(350); //1초 대기
+
+                } catch (InterruptedException e) {
+
+                    e.printStackTrace();
+
+                }
+
+
+
+                출처: https://jink1982.tistory.com/185 [돼민이]
                 startButton.setVisibility(view.VISIBLE); endButton.setVisibility(view.GONE);
                 rn.setVisibility(View.INVISIBLE); st.setVisibility(View.VISIBLE);
                 long now = System.currentTimeMillis();

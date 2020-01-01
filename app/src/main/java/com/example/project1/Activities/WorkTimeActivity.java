@@ -92,8 +92,8 @@ public class WorkTimeActivity extends AppCompatActivity {
 
                 Cursor cs = myDB.rawQuery("SELECT * FROM TIME_T", null);
                 while (cs.moveToNext()) {
-                    if (cs.getString(0).equals(startTimeText)) {
-                        String sqlInsert = "UPDATE TIME_T SET REST = '" + myText + "' WHERE TIME = '" + startTimeText + "'";
+                    if (cs.getString(0).equals(endTimeText)) {
+                        String sqlInsert = "UPDATE TIME_T SET REST = '" + myText + "' WHERE TIME = '" + endTimeText + "'";
                         myDB.execSQL(sqlInsert);
                     }
                 }
