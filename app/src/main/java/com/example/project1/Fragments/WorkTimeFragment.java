@@ -13,6 +13,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -62,8 +63,8 @@ public class WorkTimeFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_work_time, container, false);
 
         //start & end Button, TextView, ListView에 대한 참조 획득
-        final Button startButton = (Button) view.findViewById(R.id.startButton);
-        final Button endButton = (Button) view.findViewById(R.id.endButton);
+        final ImageButton startButton = (ImageButton) view.findViewById(R.id.startButton);
+        final ImageButton endButton = (ImageButton) view.findViewById(R.id.endButton);
         final Button allDeleteButton = (Button) view.findViewById(R.id.allDeleteButton);
         final TextView rn = (TextView)view.findViewById(R.id.Running);
         final TextView st = (TextView)view.findViewById(R.id.Stopped);
@@ -178,7 +179,7 @@ public class WorkTimeFragment extends Fragment {
 
                 final EditText et = new EditText(getContext());
 
-                final AlertDialog.Builder alt_bld = new AlertDialog.Builder(getContext(),R.style.MyAlertDialogStyle);
+                final AlertDialog.Builder alt_bld = new AlertDialog.Builder(getContext());
 
                 alt_bld.setTitle("TITLE")
                         .setMessage("TITLE를 입력하세요.")
@@ -311,7 +312,7 @@ public class WorkTimeFragment extends Fragment {
         else {return ed;}
     }
 
-    public void ButtonInitialize(Button startButton,Button endButton,int lastInt, View view, TextView rn, TextView st) {
+    public void ButtonInitialize(ImageButton startButton, ImageButton endButton,int lastInt, View view, TextView rn, TextView st) {
         if (lastInt == 0) {
             startButton.setVisibility(view.GONE);
             endButton.setVisibility(view.VISIBLE);

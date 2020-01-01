@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     String dbName = "sample.db";
     int dbMode = Context.MODE_PRIVATE;
     SQLiteDatabase myDB;
+
     //SectionPageAdapter에 대한 객체를 생성하여 참조 획득
     SectionPageAdapter adapter = new SectionPageAdapter(getSupportFragmentManager());
 
@@ -38,10 +39,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        myDB = openOrCreateDatabase(dbName,dbMode,null);
         Intent intent = new Intent(this, LoadingActivity.class);
         startActivity(intent);
 
-        myDB = openOrCreateDatabase(dbName,dbMode,null);
 
         //activity_main.xml에서 ViewPager에 대한 참조 획득
         mViewPager = (ViewPager) findViewById(R.id.pager_content);
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     public void setupViewPager(ViewPager viewPager) {
         adapter.addFragment(new TelFragment(), "CONTACTS");
         adapter.addFragment(new ImageFragment(), "IMAGES");
-        adapter.addFragment(new WorkTimeFragment(myDB), "WORKTIME");
+        adapter.addFragment(new WorkTimeFragment(myDB), "MADTIME");
         viewPager.setAdapter(adapter);
     }
 

@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import android.app.AlertDialog;
@@ -22,6 +24,10 @@ import com.example.project1.R;
 import com.example.project1.Classes.Tel;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
+import java.util.Date;
 import java.util.List;
 
 public class WorkTimeAdapter extends BaseAdapter  {
@@ -34,6 +40,9 @@ public class WorkTimeAdapter extends BaseAdapter  {
     private String showText;
     /////////
     Activity activity;
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    private Date storeTime;
+    private Date preValueTime;
 
     public WorkTimeAdapter(Activity activity, Context context, List<myTime> data, SQLiteDatabase mydb) {
         this.activity = activity;
@@ -68,7 +77,7 @@ public class WorkTimeAdapter extends BaseAdapter  {
         TextView stt = (TextView)view.findViewById(R.id.stt);
         TextView edt = (TextView)view.findViewById(R.id.edt);
         TextView ttl = (TextView)view.findViewById(R.id.ttl);
-        Button ntBtn = (Button)view.findViewById(R.id.newTitleButton);
+        ImageButton ntBtn = (ImageButton)view.findViewById(R.id.newTitleButton);
         Button dltBtn = (Button)view.findViewById(R.id.deleteButton);
 
         String myedt = items.get(i).getEndTime();
@@ -83,6 +92,7 @@ public class WorkTimeAdapter extends BaseAdapter  {
         ttl.setText("" +mytxt);
         stt.setText("시작  : " +items.get(i).getstartTime());
         edt.setText("끝      : " +items.get(i).getEndTime());
+
         ntBtn.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
 
@@ -111,6 +121,34 @@ public class WorkTimeAdapter extends BaseAdapter  {
 
 
         });
+
+//        dltBtn.setOnClickListener(new Button.OnClickListener() {
+//            public void onClick(View v) {
+//                String store = items.get(i).getEndTime();
+//                String preValue;
+//                int n = i;
+//                while(true){
+//                    if(!items.get(n+1).getEndTime().isEmpty()){
+//                        preValue = items.get(n+1).getEndTime();
+//                        break;
+//                    }else
+//                        n++;
+//                }
+//
+//                try{
+//                    storeTime = format.parse(store);
+//                    preValueTime = format.parse(preValue);
+//                } catch(ParseException e){
+//                    e.printStackTrace();
+//                }
+//
+//                String sqlInsert = "DELETE FROM TIME_T WHERE TIME = '" + items.get(i).getEndTime() + "'";
+//                myDB.execSQL(sqlInsert);
+//                sqlInsert = "DELETE FROM TIME_T WHERE (TIME > " + preValueTime.getTime() + " ) AND (TIME < " + storeTime.getTime() + ")";
+//                myDB.execSQL(sqlInsert);
+//
+//            }
+//        });
 
         return view;
     }

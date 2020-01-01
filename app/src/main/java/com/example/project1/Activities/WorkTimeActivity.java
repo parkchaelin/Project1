@@ -1,9 +1,11 @@
 package com.example.project1.Activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.project1.R;
 
@@ -18,7 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class WorkTimeActivity extends MainActivity {
+public class WorkTimeActivity extends AppCompatActivity {
     public Context context;
     private Intent intent;
     private String startTimeText;
@@ -39,10 +42,16 @@ public class WorkTimeActivity extends MainActivity {
     String setText1;
     String showText;
     View view;
+
+    String dbName = "sample.db";
+    int dbMode = Context.MODE_PRIVATE;
+    SQLiteDatabase myDB;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_time);
+
+        myDB = openOrCreateDatabase(dbName,dbMode,null);
         ttl = (TextView) findViewById(R.id.ttl);
         stt = (TextView) findViewById(R.id.stt);
         edt = (TextView) findViewById(R.id.edt);
