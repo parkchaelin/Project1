@@ -22,11 +22,14 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="#BDBDBD" />
+            android:background="#BDBDBD"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#00FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageButton
