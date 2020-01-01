@@ -95,11 +95,7 @@ public class WorkTimeFragment extends Fragment {
         startButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
-                try {
-                    Thread.sleep(333);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
 
                 startButton.setVisibility(view.GONE); endButton.setVisibility(view.VISIBLE);
                 rn.setVisibility(View.VISIBLE); st.setVisibility(View.INVISIBLE);
@@ -152,11 +148,6 @@ public class WorkTimeFragment extends Fragment {
         endButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
-                try {
-                    Thread.sleep(333);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
                 startButton.setVisibility(view.VISIBLE); endButton.setVisibility(view.GONE);
                 rn.setVisibility(View.INVISIBLE); st.setVisibility(View.VISIBLE);

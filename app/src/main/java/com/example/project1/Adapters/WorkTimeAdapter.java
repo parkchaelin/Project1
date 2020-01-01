@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import android.app.AlertDialog;
@@ -41,8 +42,7 @@ public class WorkTimeAdapter extends BaseAdapter  {
     /////////
     Activity activity;
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    private Date storeTime;
-    private Date preValueTime;
+    private OnItemClick mCallback;
 
     public WorkTimeAdapter(Activity activity, Context context, List<myTime> data, SQLiteDatabase mydb) {
         this.activity = activity;
@@ -52,6 +52,9 @@ public class WorkTimeAdapter extends BaseAdapter  {
         myDB = mydb;
     }
 
+    public interface OnItemClick {
+        void onClick (ListView listview);
+    }
 
 
     @Override
@@ -109,6 +112,7 @@ public class WorkTimeAdapter extends BaseAdapter  {
                                 String showText = edittext.getText().toString();
                                 String sqlInsert = "UPDATE TIME_T SET TITLE = '" + showText + "' WHERE TIME = '" + items.get(i).getEndTime() + "'";
                                 myDB.execSQL(sqlInsert);
+                                notifyDataSetChanged();
                             }
                         });
                 builder.setNegativeButton("취소",
@@ -122,33 +126,35 @@ public class WorkTimeAdapter extends BaseAdapter  {
 
         });
 
-//        dltBtn.setOnClickListener(new Button.OnClickListener() {
-//            public void onClick(View v) {
-//                String store = items.get(i).getEndTime();
-//                String preValue;
-//                int n = i;
-//                while(true){
-//                    if(!items.get(n+1).getEndTime().isEmpty()){
-//                        preValue = items.get(n+1).getEndTime();
-//                        break;
-//                    }else
-//                        n++;
-//                }
-//
-//                try{
-//                    storeTime = format.parse(store);
-//                    preValueTime = format.parse(preValue);
-//                } catch(ParseException e){
-//                    e.printStackTrace();
-//                }
-//
-//                String sqlInsert = "DELETE FROM TIME_T WHERE TIME = '" + items.get(i).getEndTime() + "'";
-//                myDB.execSQL(sqlInsert);
-//                sqlInsert = "DELETE FROM TIME_T WHERE (TIME > " + preValueTime.getTime() + " ) AND (TIME < " + storeTime.getTime() + ")";
-//                myDB.execSQL(sqlInsert);
-//
-//            }
-//        });
+        dltBtn.setOnClickListener(new Button.OnClickListener() {
+        public void onClick(View v) {
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle("삭제 하시겠습니까?");
+            builder.setMessage("진짜로?");
+            builder.setPositiveButton("예",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            String sqlDelete = "DELETE FROM TIME_T WHERE TIME = '" + items.get(i).getEndTime() + "'" ;
+                            myDB.execSQL(sqlDelete) ;
+                            sqlDelete = "DELETE FROM TIME_T WHERE TIME = '" + items.get(i).getstartTime() + "'" ;
+                            myDB.execSQL(sqlDelete) ;
+                            items.remove(i);
+                            notifyDataSetChanged();
+
+
+
+                        }
+                    });
+            builder.setNegativeButton("아니요",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+            builder.show();
+        }
+        });
 
         return view;
     }
